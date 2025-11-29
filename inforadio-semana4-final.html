@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoRadio - Guia Acessível de Radiologia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base REM - tudo se adapta com clique A+ e A- */
+        html {
+            font-size: 16px;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #fafbfc 100%);
+            color: #262626;
+            margin: 0;
+            padding: 0;
+        }
+        .skip-link {
+            position: absolute;
+            top: -2.5rem;
+            left: 0.5rem;
+            background: #0095f6;
+            color: #fff;
+            padding: 0.625rem 0.9375rem;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            z-index: 999;
+        }
+        .skip-link:focus { top: 0.75rem; }
+        header {
+            background: white;
+            padding: 1.125rem 0 0.625rem 0;
+            box-shadow: 0 1px 6px rgba(30,30,30,.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.375rem;
+            letter-spacing: -1.5px;
+        }
+        .accessibility-bar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .accessibility-btn {
+            background: #ececec;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #262626;
+            transition: background 0.2s, color 0.2s;
+        }
+        .accessibility-btn:focus, .accessibility-btn:hover {
+            background: #0095f6;
+            color: #fff;
+            outline: none;
+        }
+        .container { max-width: 68.75rem; margin: 1.875rem auto; padding: 0.75rem; }
+        .nav-pills {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.875rem;
+            flex-wrap: wrap;
+        }
+        .nav-pill {
+            background: white;
+            border: 2px solid #e5e5e5;
+            padding: 0.75rem 1.5rem;
+            border-radius: 1.875rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #262626;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .nav-pill:focus, .nav-pill:hover {
+            background: #f0f7ff;
+            color: #0095f6;
+            border-color: #0095f6;
+            outline: none;
+        }
+        .nav-pill[aria-current="page"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-color: transparent;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            gap: 1.875rem;
+        }
+        .card {
+            background: white;
+            border-radius: 1.375rem;
+            box-shadow: 0 2px 16px rgba(120,60,180,0.09);
+            overflow: hidden;
+            transition: box-shadow .2s, transform .2s;
+            display: flex;
+            flex-direction: column;
+            min-height: 22.5rem;
+            border: 1.3px solid #f3f4f7;
+        }
+        .card:focus-within, .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(100,120,210,0.17);
+            border: 1.5px solid #764ba2;
+        }
+        .card-header {
+            padding: 1.25rem 1.125rem 0.625rem 1.125rem;
+            color: white;
+            font-size: 1.6875rem;
+            font-weight: 600;
+            text-align: left;
+            background: linear-gradient(135deg, #ee5a24, #764ba2 99%);
+        }
+        .card-header.exam-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .card-body {
+            padding: 1.25rem 1.5rem;
+            flex: 1;
+        }
+        .card-body h4 {
+            color: #262626;
+            font-size: 1.18rem;
+            font-weight: 700;
+            margin-top: 0;
+        }
+        .card-body p, .card-body ul {
+            font-size: 1rem;
+            color: #595959;
+        }
+        .card-body ul { margin: 0.75rem 0 0.375rem 1.25rem; }
+        .card-body li { margin-bottom: 0.3125rem; }
+        .listen-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 1.875rem;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.13);
+            transition: all 0.2s;
+            z-index: 90;
+            cursor: pointer;
+        }
+        .listen-btn:hover, .listen-btn:focus {
+            background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+            transform: scale(1.08);
+        }
+        footer {
+            background: white;
+            text-align: center;
+            padding: 1.875rem 1.25rem;
+            border-top: 1px solid #e5e5e5;
+            margin-top: 3.125rem;
+        }
+        footer p { color: #8a8a8a; margin-bottom: 0.375rem; font-size: 0.9875rem;}
+        .glossary-container { background: #f9fafb; padding: 1.5rem; border-radius: 0.75rem; }
+        .glossary-search { margin-bottom: 1.5rem; }
+        .glossary-list { display: grid; gap: 1rem; }
+        .glossary-item { background: white; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #667eea; }
+        .glossary-item h4 { color: #262626; font-size: 1.1rem; margin: 0 0 0.5rem 0; font-weight: 700; }
+        .glossary-item p { color: #595959; margin: 0; font-size: 0.95rem; line-height: 1.5; }
+        .glossary-item.hidden { display: none; }
+        
+        /* Alto Contraste - CORRIGIDO */
+        .high-contrast {
+            background-color: #000000 !important;
+            color: #FFFFFF !important;
+        }
+        .high-contrast body {
+            background: #000000 !important;
+            color: #FFFFFF !important;
+        }
+        .high-contrast header {
+            background: #1a1a1a !important;
+            color: #FFFFFF !important;
+            border-bottom: 3px solid #FFFFFF !important;
+        }
+        .high-contrast .logo {
+            -webkit-text-fill-color: #FFFFFF !important;
+            color: #FFFFFF !important;
+        }
+        .high-contrast .accessibility-btn {
+            background: #333333 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .accessibility-btn:hover,
+        .high-contrast .accessibility-btn:focus {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+        }
+        .high-contrast .nav-pill {
+            background: #000000 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .nav-pill:hover,
+        .high-contrast .nav-pill:focus {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+        }
+        .high-contrast .nav-pill[aria-current="page"] {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .card {
+            background: #1a1a1a !important;
+            color: #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .card-header {
+            background: #333333 !important;
+            color: #FFFFFF !important;
+            border-bottom: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .card-body h4 {
+            color: #FFFFFF !important;
+        }
+        .high-contrast .card-body p,
+        .high-contrast .card-body ul {
+            color: #FFFFFF !important;
+        }
+        .high-contrast .container {
+            background: #000000 !important;
+            color: #FFFFFF !important;
+        }
+        .high-contrast .glossary-container {
+            background: #1a1a1a !important;
+            color: #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .glossary-item {
+            background: #1a1a1a !important;
+            color: #FFFFFF !important;
+            border-left: 4px solid #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .glossary-item h4 {
+            color: #FFFFFF !important;
+        }
+        .high-contrast .glossary-item p {
+            color: #FFFFFF !important;
+        }
+        .high-contrast #glossary-search {
+            background: #333333 !important;
+            color: #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast footer {
+            background: #1a1a1a !important;
+            color: #FFFFFF !important;
+            border-top: 3px solid #FFFFFF !important;
+        }
+        .high-contrast footer p {
+            color: #FFFFFF !important;
+        }
+        .high-contrast .listen-btn {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast .listen-btn:hover,
+        .high-contrast .listen-btn:focus {
+            background: #FFD700 !important;
+            color: #000000 !important;
+        }
+        .high-contrast h2,
+        .high-contrast h3,
+        .high-contrast h4 {
+            color: #FFFFFF !important;
+        }
+        .high-contrast .content-section {
+            background: #1a1a1a !important;
+            color: #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .high-contrast ul li {
+            color: #FFFFFF !important;
+        }
+        
+        @media (max-width: 48rem) {
+            .container { padding: 0.625rem; }
+            .listen-btn { width: 2.75rem; height: 2.75rem; font-size: 1.4375rem; bottom: 1rem; right: 1rem; }
+        }
+        *:focus { outline: 2px solid #0095f6; outline-offset: 2px; }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+    <header>
+        <div class="logo">🩺 InfoRadio</div>
+        <div class="accessibility-bar">
+            <button class="accessibility-btn" onclick="decreaseFontSize()" aria-label="Diminuir tamanho da fonte">A−</button>
+            <button class="accessibility-btn" onclick="increaseFontSize()" aria-label="Aumentar tamanho da fonte">A+</button>
+            <button class="accessibility-btn" onclick="toggleHighContrast()" aria-label="Alternar alto contraste">⚫ Contraste</button>
+        </div>
+    </header>
+    <main id="main-content" class="container">
+        <nav class="nav-pills" aria-label="Seções principais" id="nav-menu">
+            <a href="#exames" class="nav-pill" aria-current="page">Exames</a>
+            <a href="#glossario" class="nav-pill">Glossário</a>
+            <a href="#biosseguranca" class="nav-pill">Biossegurança</a>
+            <a href="#indicacoes" class="nav-pill">Indicações</a>
+        </nav>
+        <section id="exames">
+            <h2 style="text-align:center; margin-bottom: 1.5rem;">Exames de Radiologia</h2>
+            <div class="cards-grid">
+              <div class="card" tabindex="0">
+                <div class="card-header"><i class="fa-solid fa-circle-xmark"></i> Raio-X</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Usa radiação para gerar imagens do interior do corpo, principalmente ossos e pulmões.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Detecta fraturas, problemas nos pulmões e outras alterações.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Pessoa deita ou fica em pé na frente da máquina, exame rápido, apenas alguns segundos.</p>
+                  <h4>Preparo</h4>
+                  <p>Retirar objetos metálicos, normalmente não requer jejum.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header exam-2"><i class="fa-solid fa-computer"></i> Tomografia Computadorizada (TC)</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Tira várias imagens internas com raios-X, formando imagens detalhadas dos órgãos.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Detecta tumores, inflamações, sangramentos.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Pessoa deita em uma mesa que entra num "túnel", dura de 10 a 30 minutos. Às vezes usa contraste.</p>
+                  <h4>Preparo</h4>
+                  <p>Depende do exame, pode pedir jejum ou contraste.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header exam-3"><i class="fa-solid fa-brain"></i> Ressonância Magnética (RM)</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Usa ímãs fortes para imagens detalhadas do corpo, não usa radiação.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Ótima para ver músculos, cérebro, medula e tecidos moles.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Pessoa entra numa máquina em formato de túnel. Exame faz barulho, usa protetor auricular.</p>
+                  <h4>Preparo</h4>
+                  <p>Retirar metais, avisar sobre implantes.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header"><i class="fa-solid fa-wave-square"></i> Ultrassonografia (US)</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Usa ondas sonoras para formar imagens, é indolor e sem radiação.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Ver órgãos, tumores, gravidez, cálculo, inflamação.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Pessoa deita na maca, passa gel e aparelho na pele. Exame dura 15-30 min.</p>
+                  <h4>Preparo</h4>
+                  <p>Jejum ou bexiga cheia em alguns casos.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header exam-2"><i class="fa-solid fa-ribbon"></i> Mamografia</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Raio-X focado nas mamas, detecta alterações precocemente.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Screening do câncer de mama, investigar nódulos.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Peito entre duas placas, faz compressão rápida, imagens de ângulos diferentes. Dura 10-15 min.</p>
+                  <h4>Preparo</h4>
+                  <p>Não usar desodorante no dia. Ideal entre 7-14 dias após menstruação.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header exam-3"><i class="fa-solid fa-bone"></i> Densitometria Óssea</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Mede a densidade e resistência dos ossos.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Avaliar osteoporose e risco de fraturas em idosos.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Pessoa deita, aparelho passa sobre a lombar/quadril. Exame indolor, dura 15 min.</p>
+                  <h4>Preparo</h4>
+                  <p>Sem preparo especial.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header"><i class="fa-solid fa-flask"></i> PET-CT</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Combina PET (metabolismo) e tomografia (anatomia) com contraste levemente radioativo.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Oncologia, neurologia, cardiologia: detectar tumores, Alzheimer, inflamações.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Injeta radiofármaco, espera 1h, exame na máquina tipo túnel, dura 45 min.</p>
+                  <h4>Preparo</h4>
+                  <p>Jejum 4-6h, roupas sem metal. Beber água.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header exam-2"><i class="fa-solid fa-vial-circle-check"></i> Cintilografia</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Exame que injeta substância radioativa, mostra funcionamento de órgãos.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Ver tireoide, coração, rins, ossos; infecção; avaliação funcional.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Injeta radiofármaco, aguarda definição do órgão, imagens feitas na "gama câmera".</p>
+                  <h4>Preparo</h4>
+                  <p>Varia: jejum ou dieta especial em alguns casos.</p>
+                </div>
+              </div>
+              <div class="card" tabindex="0">
+                <div class="card-header exam-3"><i class="fa-solid fa-water"></i> Radiografia Contrastada</div>
+                <div class="card-body">
+                  <h4>O que é?</h4>
+                  <p>Raio-X com líquido contraste (ingerido ou injetado), detalhes de órgãos ocos.</p>
+                  <h4>Para que serve?</h4>
+                  <p>Investiga estômago, intestinos, vias urinárias. Diagnostica úlceras, obstrução, cálculo.</p>
+                  <h4>Como é feito?</h4>
+                  <p>Bebe ou injeta contraste, série de radiografias após. Exame dura 30-60 min.</p>
+                  <h4>Preparo</h4>
+                  <p>Jejum e eventualmente laxante. Avisar alergia a iodo.</p>
+                </div>
+              </div>
+            </div>
+        </section>
+        <section id="glossario" style="margin-top:2.75rem;">
+            <h2 style="text-align:center; margin-bottom: 1.5rem;">Glossário de Radiologia</h2>
+            <div class="glossary-container">
+                <div class="glossary-search">
+                    <input type="text" id="glossary-search" placeholder="Buscar termo..." aria-label="Buscar termo no glossário" style="width:100%; padding:0.75rem; border-radius:0.5rem; border:2px solid #e5e5e5; font-size:1rem;">
+                </div>
+                <div id="glossary-list" class="glossary-list">
+                    <div class="glossary-item"><h4>Abdômen</h4><p>Região do corpo entre o tórax e a pelve, contendo órgãos como estômago, fígado, rins.</p></div>
+                    <div class="glossary-item"><h4>Angiografia</h4><p>Exame que visualiza vasos sanguíneos usando contraste radiológico.</p></div>
+                    <div class="glossary-item"><h4>Artrografia</h4><p>Exame das articulações (juntas) com contraste para visualizar cartilagem e ligamentos.</p></div>
+                    <div class="glossary-item"><h4>Biópsia</h4><p>Retirada de pequena amostra de tecido para análise sob microscópio.</p></div>
+                    <div class="glossary-item"><h4>Cálculo</h4><p>Depósito sólido que se forma na vesícula biliar, rim ou bexiga, pode causar dor.</p></div>
+                    <div class="glossary-item"><h4>Contraste</h4><p>Líquido ou pó que melhora a visualização de órgãos em exames de imagem.</p></div>
+                    <div class="glossary-item"><h4>Cintilografia</h4><p>Exame que injeta substância radioativa para visualizar funcionamento de órgãos.</p></div>
+                    <div class="glossary-item"><h4>Cirrose</h4><p>Doença do fígado onde tecido saudável é substituído por cicatrizes.</p></div>
+                    <div class="glossary-item"><h4>Cisto</h4><p>Bolsa com líquido dentro do corpo, geralmente benigno.</p></div>
+                    <div class="glossary-item"><h4>Colangiografia</h4><p>Exame dos canais que transportam bile do fígado ao intestino.</p></div>
+                    <div class="glossary-item"><h4>Contraindicação</h4><p>Razão médica pela qual um exame ou tratamento não deve ser feito.</p></div>
+                    <div class="glossary-item"><h4>Densitometria</h4><p>Exame que mede a densidade e resistência dos ossos.</p></div>
+                    <div class="glossary-item"><h4>Derrame</h4><p>Acúmulo anormal de líquido em cavidades do corpo como pulmões ou coração.</p></div>
+                    <div class="glossary-item"><h4>Diagnóstico</h4><p>Identificação de uma doença ou condição através de exames e sintomas.</p></div>
+                    <div class="glossary-item"><h4>Divertículo</h4><p>Pequena bolsa que se forma nas paredes do intestino.</p></div>
+                    <div class="glossary-item"><h4>Doppler</h4><p>Técnica de ultrassom que mostra o fluxo de sangue nos vasos.</p></div>
+                    <div class="glossary-item"><h4>Edema</h4><p>Inchaço causado por acúmulo de líquido nos tecidos do corpo.</p></div>
+                    <div class="glossary-item"><h4>Embolismo</h4><p>Bloqueio de um vaso sanguíneo por coágulo ou partícula.</p></div>
+                    <div class="glossary-item"><h4>Endoscopia</h4><p>Exame onde tubo com câmera explora o interior do corpo.</p></div>
+                    <div class="glossary-item"><h4>Fistula</h4><p>Conexão anormal entre dois órgãos ou entre órgão e pele.</p></div>
+                    <div class="glossary-item"><h4>Fluoroscopia</h4><p>Exame contínuo de raio-X que mostra movimento em tempo real.</p></div>
+                    <div class="glossary-item"><h4>Fratura</h4><p>Quebra ou trinca em um osso.</p></div>
+                    <div class="glossary-item"><h4>Hematoma</h4><p>Acúmulo de sangue em tecidos após lesão ou cirurgia.</p></div>
+                    <div class="glossary-item"><h4>Hepatomegalia</h4><p>Aumento anormal do tamanho do fígado.</p></div>
+                    <div class="glossary-item"><h4>Hérnia</h4><p>Protuberância de órgão ou tecido através de abertura anormal.</p></div>
+                    <div class="glossary-item"><h4>Infarto</h4><p>Morte de tecido por falta de fluxo sanguíneo.</p></div>
+                    <div class="glossary-item"><h4>Inflamação</h4><p>Reação do corpo a lesão ou infecção com inchaço, calor e vermelhidão.</p></div>
+                    <div class="glossary-item"><h4>Infecção</h4><p>Invasão de bactérias, vírus ou fungos causando doença.</p></div>
+                    <div class="glossary-item"><h4>Isquemia</h4><p>Redução de fluxo sanguíneo causando falta de oxigênio.</p></div>
+                    <div class="glossary-item"><h4>Mamografia</h4><p>Exame de raio-X especial das mamas para detectar alterações.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="biosseguranca" style="margin-top:2.75rem;">
+            <h2 style="text-align:center; margin-bottom: 1.5rem;">Biossegurança nos Exames</h2>
+            <div class="content-section" style="background:#f9fafb;">
+                <h3>Segurança dos Exames</h3>
+                <p>Todos os exames do site seguem protocolos rígidos. Radiação e contraste são usados apenas quando necessários e com controle.</p>
+                <h3>Dicas</h3>
+                <ul>
+                  <li>Lembre de avisar gravidez, alergia a iodo, uso de marca-passo ou prótese.</li>
+                  <li>Se for restrito a movimento, equipe oferece auxílio.</li>
+                  <li>A maior parte dos exames não dói.</li>
+                </ul>
+            </div>
+        </section>
+        <section id="indicacoes" style="margin-top:2.75rem;">
+            <h2 style="text-align:center; margin-bottom: 1.5rem;">Quando Fazer Cada Exame?</h2>
+            <div class="content-section" style="background:#f9fafb;">
+              <h3>Exames comuns:</h3>
+              <ul>
+                <li><strong>Raio-X:</strong> fratura, dor óssea, lesão, tosse persistente, exame pulmonar de rotina</li>
+                <li><strong>US/TC/RM:</strong> investigação detalhada (tumor, inflamação, dor inexplicável)</li>
+                <li><strong>Mamografia:</strong> rastreio de câncer de mama em mulheres acima de 40 anos</li>
+                <li><strong>Densitometria:</strong> avaliação de osteoporose</li>
+              </ul>
+              <div style="margin-top:1.875rem; padding:1.125rem; border-radius:0.6875rem; background:linear-gradient(135deg,#8096ee22,#96dbee11);">
+                <strong>Sempre siga as orientações médicas!</strong> O exame ideal é indicado pelo profissional conforme sua necessidade.
+              </div>
+            </div>
+        </section>
+    </main>
+    <button class="listen-btn" onclick="speakContent()" aria-label="Ouvir conteúdo da página" title="Ouvir página">🔊</button>
+    <footer>
+        <p><b>InfoRadio - Guia Moderno & Acessível de Radiologia</b></p>
+        <p>Desenvolvido para facilitar o acesso à informação sobre exames de imagem</p>
+        <p style="font-size:0.8125rem;">Atalhos: Ctrl+M (contraste) | Ctrl+L (ler)</p>
+    </footer>
+    <script>
+        let currentFontSize = 16;
+        const minFontSize = 14;
+        const maxFontSize = 24;
+        
+        function increaseFontSize() {
+            if(currentFontSize < maxFontSize) {
+                currentFontSize += 2;
+                document.documentElement.style.fontSize = currentFontSize + 'px';
+                announceToScreenReader('Fonte aumentada para ' + currentFontSize + ' pixels');
+            }
+        }
+        
+        function decreaseFontSize() {
+            if(currentFontSize > minFontSize) {
+                currentFontSize -= 2;
+                document.documentElement.style.fontSize = currentFontSize + 'px';
+                announceToScreenReader('Fonte diminuída para ' + currentFontSize + ' pixels');
+            }
+        }
+        
+        let highContrastActive = false;
+        function toggleHighContrast() {
+            highContrastActive = !highContrastActive;
+            document.body.classList.toggle('high-contrast', highContrastActive);
+            announceToScreenReader(highContrastActive ? 'Alto contraste ativado' : 'Alto contraste desativado');
+        }
+        
+        function speakContent() {
+            speechSynthesis.cancel();
+            if('speechSynthesis' in window) {
+                const mainContent = document.getElementById('main-content');
+                const textToSpeak = getReadableText(mainContent);
+                if(textToSpeak.trim()) {
+                    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                    utterance.lang = 'pt-BR';
+                    utterance.rate = 0.9;
+                    utterance.onstart = () => {
+                        announceToScreenReader('Iniciando leitura da página');
+                    };
+                    utterance.onend = () => {
+                        announceToScreenReader('Leitura concluída');
+                    };
+                    speechSynthesis.speak(utterance);
+                }
+            }
+        }
+        
+        function getReadableText(element) {
+            let text = '';
+            const elements = element.querySelectorAll('h1,h2,h3,p,li');
+            elements.forEach(el => {
+                if(el.offsetParent !== null) {
+                    text += el.textContent.trim() + '. ';
+                }
+            });
+            return text;
+        }
+        
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.style.position = 'absolute';
+            announcement.style.left = '-10000px';
+            document.body.appendChild(announcement);
+            announcement.textContent = message;
+            setTimeout(() => {
+                document.body.removeChild(announcement);
+            }, 1000);
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            if(e.ctrlKey && ['+', '='].includes(e.key)) {
+                e.preventDefault();
+                increaseFontSize();
+            }
+            if(e.ctrlKey && e.key === '-') {
+                e.preventDefault();
+                decreaseFontSize();
+            }
+            if(e.ctrlKey && e.key === 'm') {
+                e.preventDefault();
+                toggleHighContrast();
+            }
+            if(e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                speakContent();
+            }
+        });
+        
+        document.getElementById('glossary-search').addEventListener('keyup', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const glossaryItems = document.querySelectorAll('.glossary-item');
+            glossaryItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if(text.includes(searchTerm) || searchTerm === '') {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
