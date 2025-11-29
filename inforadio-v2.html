@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoRadio - Guia Acessível de Radiologia</title>
+    <style>
+        /* Reset e configurações básicas */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+            font-size: 18px;
+            padding: 20px;
+        }
+
+        /* Pular para conteúdo principal - acessibilidade */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 3px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Controles de acessibilidade */
+        .accessibility-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .accessibility-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .accessibility-btn:hover,
+        .accessibility-btn:focus {
+            background-color: #2980b9;
+            outline: 3px solid #f39c12;
+        }
+
+        /* Menu hambúrguer */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #2c3e50;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .menu-toggle:focus {
+            outline: 3px solid #f39c12;
+        }
+
+        /* Navegação principal */
+        nav {
+            margin: 30px 0;
+        }
+
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-buttons.hidden {
+            display: none;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 25px 30px;
+            border-radius: 15px;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+            position: relative;
+        }
+
+        .nav-btn:hover,
+        .nav-btn:focus {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            outline: none;
+            border-color: #f39c12;
+        }
+
+        /* Indicador de seção ativa */
+        .nav-btn[aria-current="page"] {
+            border: 3px solid #f39c12;
+            box-shadow: inset 0 0 10px rgba(243, 156, 18, 0.3);
+        }
+
+        .nav-btn[aria-current="page"]::before {
+            content: "✓ ";
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .nav-btn.exames {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .nav-btn.biosseguranca {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .nav-btn.indicacoes {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        /* Seções de conteúdo */
+        .content-section {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+        }
+
+        .content-section h2 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-section h3 {
+            color: #34495e;
+            font-size: 1.6em;
+            margin: 25px 0 15px 0;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+
+        .content-section p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .content-section ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .content-section li {
+            margin-bottom: 8px;
+        }
+
+        /* Botão para ouvir página */
+        .listen-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .listen-btn:hover,
+        .listen-btn:focus {
+            background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+            outline: 3px solid #f39c12;
+            transform: scale(1.05);
+        }
+
+        /* Breadcrumb de localização */
+        .breadcrumb {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover,
+        .breadcrumb a:focus {
+            text-decoration: underline;
+            outline: 2px solid #f39c12;
+        }
+
+        /* Alto contraste */
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+
+        .high-contrast .content-section {
+            background-color: #222 !important;
+            color: #fff !important;
+            border-left-color: #fff !important;
+        }
+
+        .high-contrast header {
+            background-color: #111 !important;
+            color: #fff !important;
+        }
+
+        /* Fontes ajustáveis */
+        .font-small { font-size: 16px; }
+        .font-medium { font-size: 18px; }
+        .font-large { font-size: 22px; }
+        .font-xlarge { font-size: 26px; }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 16px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-buttons {
+                grid-template-columns: 1fr;
+                margin-top: 20px;
+            }
+            
+            .nav-btn {
+                font-size: 1.2em;
+                padding: 20px;
+            }
+            
+            .accessibility-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .breadcrumb {
+                font-size: 0.8em;
+            }
+        }
+
+        /* Estados de foco visíveis para navegação por teclado */
+        *:focus {
+            outline: 3px solid #f39c12;
+            outline-offset: 2px;
+        }
+
+        /* Animação suave para mudanças */
+        * {
+            transition: font-size 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Link para pular ao conteúdo principal -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <header>
+        <h1>InfoRadio</h1>
+        <p class="subtitle">Guia Acessível de Radiologia</p>
+        <p>Informações claras e acessíveis sobre exames de imagem</p>
+
+        <!-- Controles de Acessibilidade -->
+        <div class="accessibility-controls">
+            <button class="accessibility-btn" onclick="decreaseFontSize()" aria-label="Diminuir tamanho da fonte">A-</button>
+            <button class="accessibility-btn" onclick="increaseFontSize()" aria-label="Aumentar tamanho da fonte">A+</button>
+            <button class="accessibility-btn" onclick="toggleHighContrast()" aria-label="Alternar alto contraste">Alto Contraste</button>
+            <button class="accessibility-btn listen-btn" onclick="speakContent()" aria-label="Ouvir conteúdo da página">🔊 Ouvir Página</button>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- Breadcrumb de localização -->
+        <div class="breadcrumb" role="navigation" aria-label="Você está em">
+            <span>InfoRadio</span>
+            <span id="breadcrumb-current"> > Página Inicial</span>
+        </div>
+
+        <!-- Menu hambúrguer para mobile -->
+        <button class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" id="menu-toggle-btn">
+            ☰ Menu
+        </button>
+
+        <!-- Navegação Principal -->
+        <nav aria-label="Navegação principal">
+            <div class="nav-buttons" id="nav-menu">
+                <a href="#exames" class="nav-btn exames" role="button" aria-describedby="exames-desc" onclick="updateActive(this, 'Exames'); return true;">
+                    📱 Exames
+                </a>
+                <a href="#biosseguranca" class="nav-btn biosseguranca" role="button" aria-describedby="bio-desc" onclick="updateActive(this, 'Biossegurança'); return true;">
+                    🛡️ Biossegurança
+                </a>
+                <a href="#indicacoes" class="nav-btn indicacoes" role="button" aria-describedby="ind-desc" onclick="updateActive(this, 'Indicações'); return true;">
+                    📋 Indicações
+                </a>
+            </div>
+        </nav>
+
+        <!-- Descrições ARIA melhoradas (ocultas visualmente) -->
+        <div style="display: none;">
+            <span id="exames-desc">Saiba mais sobre os principais exames de radiologia: Raio-X, Tomografia e Ressonância Magnética</span>
+            <span id="bio-desc">Informações sobre segurança e biossegurança nos exames radiológicos</span>
+            <span id="ind-desc">Aprenda quando é apropriado fazer cada tipo de exame</span>
+        </div>
+
+        <!-- Seção: Exames -->
+        <section id="exames" class="content-section" aria-labelledby="exames-title">
+            <h2 id="exames-title">Exames de Radiologia</h2>
+            
+            <h3>Raio-X</h3>
+            <p><strong>O que é?</strong> O raio-X é um exame rápido e simples que usa radiação para ver dentro do seu corpo, principalmente ossos e pulmões.</p>
+            <p><strong>Para que serve?</strong> Serve para ver se há fraturas nos ossos, problemas nos pulmões como pneumonia, ou outras alterações internas.</p>
+            <p><strong>Como é feito?</strong> Você fica em pé ou deitado enquanto uma máquina tira "fotos" do seu corpo. É rápido, dura apenas alguns segundos.</p>
+            <p><strong>Precisa se preparar?</strong> Normalmente não precisa de nenhum preparo especial. Apenas tire objetos de metal como colares e pulseiras.</p>
+
+            <h3>Tomografia Computadorizada (TC)</h3>
+            <p><strong>O que é?</strong> A tomografia é como várias fotos de raio-X feitas ao mesmo tempo, criando imagens detalhadas de qualquer parte do corpo.</p>
+            <p><strong>Para que serve?</strong> Mostra detalhes de órgãos internos, pode detectar tumores, inflamações e outras alterações com mais precisão que o raio-X comum.</p>
+            <p><strong>Como é feito?</strong> Você deita em uma mesa que passa por dentro de um túnel. O exame demora entre 10 a 30 minutos. Às vezes precisa tomar um líquido especial (contraste).</p>
+            <p><strong>Precisa se preparar?</strong> Depende do tipo de tomografia. Algumas vezes precisa ficar em jejum ou tomar contraste.</p>
+
+            <h3>Ressonância Magnética (RM)</h3>
+            <p><strong>O que é?</strong> A ressonância usa ímãs muito fortes para criar imagens detalhadas do corpo, sem usar radiação.</p>
+            <p><strong>Para que serve?</strong> É excelente para ver músculos, tendões, cérebro, medula espinhal e outros tecidos moles do corpo.</p>
+            <p><strong>Como é feito?</strong> Você deita em uma mesa que entra em um túnel. O exame faz barulho, mas você recebe protetor auricular. Pode demorar de 30 a 60 minutos.</p>
+            <p><strong>Precisa se preparar?</strong> Retire todos os objetos de metal. Pessoas com marca-passo ou implantes metálicos devem avisar antes do exame.</p>
+
+            <!-- SEÇÃO: NOVOS EXAMES - SEMANA 2 -->
+<!-- Copie e cole cada exame na seção de conteúdo do seu HTML, após o "Ressonância Magnética (RM)" -->
+
+<!-- ========================================== -->
+<!-- EXAME 4: ULTRASSONOGRAFIA -->
+<!-- ========================================== -->
+
+<h3>Ultrassonografia (US)</h3>
+<p><strong>O que é?</strong> A ultrassonografia é um exame que usa ondas sonoras de alta frequência para criar imagens do interior do seu corpo. Não usa radiação, é seguro e rápido.</p>
+
+<p><strong>Para que serve?</strong> Serve para ver órgãos internos como fígado, rim, pâncreas, coração e ovários. Pode detectar cálculos, tumores, inflamações e acompanhar uma gravidez.</p>
+
+<p><strong>Como é feito?</strong> Você deita em uma maca confortável. O técnico coloca um gel especial na pele para melhor condução do som. Depois passa um aparelho chamado transdutor sobre a área do corpo que será examinada. O exame não dói e dura entre 15 a 30 minutos, dependendo de qual órgão está sendo investigado.</p>
+
+<p><strong>Precisa se preparar?</strong> Depende do tipo de ultrassom. Para abdômen completo, pode ser necessário jejum de 6 horas. Para alguns exames, pede-se bexiga cheia. O técnico vai explicar antes. Ultrassonografia de mamas e tireóide não precisam de preparo especial.</p>
+
+<p><strong>Indicações principais:</strong></p>
+<ul>
+  <li>Avaliação de abdômen (fígado, rins, pâncreas, vesícula)</li>
+  <li>Acompanhamento de gravidez</li>
+  <li>Avaliação de mamas</li>
+  <li>Avaliação de tireóide</li>
+  <li>Avaliação de articulações e músculos</li>
+  <li>Avaliação do coração</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- EXAME 5: MAMOGRAFIA -->
+<!-- ========================================== -->
+
+<h3>Mamografia</h3>
+<p><strong>O que é?</strong> A mamografia é um exame de raio-X especial feito apenas para as mamas. Ela cria imagens detalhadas do tecido mamário para detectar problemas.</p>
+
+<p><strong>Para que serve?</strong> Serve para detectar tumores, calcificações suspeitas e outras alterações no tecido das mamas. É o principal exame para rastreamento e diagnóstico de câncer de mama.</p>
+
+<p><strong>Como é feito?</strong> Você fica em pé diante do aparelho. A mama é posicionada entre duas placas que fazem uma leve compressão. Tira-se fotos de diferentes ângulos (de cima para baixo e de um lado para o outro). O desconforto é mínimo e dura apenas alguns segundos. O exame completo leva entre 10 a 15 minutos.</p>
+
+<p><strong>Precisa se preparar?</strong> Não há preparo complicado. Evite usar desodorante, talco ou loção no dia do exame, pois esses produtos podem prejudicar a qualidade da imagem. O melhor período para fazer a mamografia é de 7 a 14 dias após o início da menstruação, quando as mamas estão menos sensíveis.</p>
+
+<p><strong>Indicações principais:</strong></p>
+<ul>
+  <li>Rastreamento de câncer de mama em mulheres acima de 40 anos (conforme orientação médica)</li>
+  <li>Investigação de nódulos ou caroços palpáveis</li>
+  <li>Investigação de dor ou inchaço nas mamas</li>
+  <li>Avaliação de descarga pelo mamilo</li>
+  <li>História familiar de câncer de mama</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- EXAME 6: DENSITOMETRIA ÓSSEA -->
+<!-- ========================================== -->
+
+<h3>Densitometria Óssea</h3>
+<p><strong>O que é?</strong> A densitometria óssea é um exame que mede a densidade e resistência dos seus ossos. Ela ajuda a detectar se os ossos estão frágeis ou porosos.</p>
+
+<p><strong>Para que serve?</strong> Serve para detectar osteoporose e osteopenia, que são condições onde os ossos ficam mais frágeis e com risco aumentado de fraturas. É especialmente importante para mulheres após a menopausa.</p>
+
+<p><strong>Como é feito?</strong> Você deita confortavelmente em uma maca especial. Uma máquina com raio-X de baixa intensidade passa sobre seus ossos, geralmente da coluna, quadril e antebraço. Não há dor, o exame é rápido e dura entre 10 a 20 minutos. Você fica completamente vestido durante o exame.</p>
+
+<p><strong>Precisa se preparar?</strong> Não há preparo especial. Retire objetos metálicos como colares, pulseiras e anéis. A quantidade de radiação é muito pequena, muito menor que a de um raio-X comum.</p>
+
+<p><strong>Indicações principais:</strong></p>
+<ul>
+  <li>Mulheres após menopausa</li>
+  <li>Homens com mais de 70 anos</li>
+  <li>Histórico familiar de osteoporose</li>
+  <li>Uso prolongado de medicamentos como corticoides</li>
+  <li>Doenças que afetam absorção de cálcio</li>
+  <li>Avaliação após fratura por trauma mínimo</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- EXAME 7: PET-CT -->
+<!-- ========================================== -->
+
+<h3>PET-CT (Tomografia por Emissão de Pósitrons)</h3>
+<p><strong>O que é?</strong> PET-CT é a combinação de dois exames: o PET (que detecta atividade metabólica do corpo) e a tomografia (que mostra a forma e localização das estruturas). Juntos, oferecem informações muito precisas.</p>
+
+<p><strong>Para que serve?</strong> Serve principalmente para detectar tumores, metástases, inflamações ativas e problemas neurológicos como Alzheimer. É muito usado em oncologia, cardiologia e neurologia.</p>
+
+<p><strong>Como é feito?</strong> Primeiro, injeta-se na veia uma substância levemente radioativa. Você espera cerca de 1 hora enquanto a substância se distribui pelo corpo. Depois, deita em uma maca que passa por dentro de um aparelho em forma de tubo. O exame dura entre 30 a 45 minutos e é indolor.</p>
+
+<p><strong>Precisa se preparar?</strong> Você deve vir em jejum de 4 a 6 horas antes do exame. Beba bastante água após a injeção. Use roupas sem partes metálicas. Avise se está grávida, amamentando ou tem claustrofobia.</p>
+
+<p><strong>Indicações principais:</strong></p>
+<ul>
+  <li>Suspeita e acompanhamento de câncer</li>
+  <li>Investigação de metástases (disseminação do câncer)</li>
+  <li>Problemas cardíacos e coronarianos</li>
+  <li>Investigação de suspeita de Alzheimer</li>
+  <li>Detecção de inflamações crônicas</li>
+  <li>Avaliação de febre de origem desconhecida</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- EXAME 8: CINTILOGRAFIA -->
+<!-- ========================================== -->
+
+<h3>Cintilografia</h3>
+<p><strong>O que é?</strong> A cintilografia é um exame que injeta uma substância levemente radioativa no corpo para visualizar como um órgão está funcionando. É diferente de outros exames porque mostra atividade, não apenas forma.</p>
+
+<p><strong>Para que serve?</strong> Serve para avaliar o funcionamento de órgãos como tireóide, coração, rins e ossos. Detecta inflamações ativas, infecções, problemas de circulação e anomalias funcionais.</p>
+
+<p><strong>Como é feito?</strong> Injeta-se uma substância radioativa na veia. O tempo de espera varia conforme o órgão a ser estudado: pode ser de 15 minutos a 24 horas. Depois, você deita sob uma câmara especial (gama câmera) que detecta a radiação e cria a imagem. O exame em si dura 20 a 60 minutos, conforme o tipo.</p>
+
+<p><strong>Precisa se preparar?</strong> O preparo varia conforme o tipo de cintilografia. Alguns exames pedem jejum, outros pedem hidratação. O médico vai orientar especificamente. Avise sobre alergias e se está gestante.</p>
+
+<p><strong>Indicações principais:</strong></p>
+<ul>
+  <li>Problemas de tireóide</li>
+  <li>Doença cardíaca coronariana</li>
+  <li>Inflamação e infecção óssea</li>
+  <li>Problemas renais</li>
+  <li>Dor crônica em ossos</li>
+  <li>Investigação de febre de origem desconhecida</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- EXAME 9: RADIOGRAFIA CONTRASTADA -->
+<!-- ========================================== -->
+
+<h3>Radiografia Contrastada</h3>
+<p><strong>O que é?</strong> A radiografia contrastada é um raio-X feito com uma substância especial chamada contraste que melhora muito a visualização de órgãos internos. O contraste é bebido ou injetado, e depois as imagens são tiradas.</p>
+
+<p><strong>Para que serve?</strong> Serve para visualizar detalhadamente o esôfago, estômago, intestinos delgado e grosso, e as vias biliares e urinárias. Detecta úlceras, obstruções, inflamações e outras alterações.</p>
+
+<p><strong>Como é feito?</strong> Depende do tipo: se for do trato gastrointestinal, você bebe o contraste (que tem sabor como bário). Se for das vias biliares ou urinárias, o contraste pode ser injetado. Depois, o técnico tira radiografias em sequência enquanto o contraste percorre o órgão. O exame dura entre 30 minutos a 1 hora.</p>
+
+<p><strong>Precisa se preparar?</strong> Prepare-se bem! Jejum completo (nada de comida ou bebida) por 6 a 8 horas antes do exame. Na noite anterior, pode ser necessário tomar um laxante para limpar os intestinos. Avise se tem alergia a iodo ou contraste.</p>
+
+<p><strong>Indicações principais:</strong></p>
+<ul>
+  <li>Suspeita de úlcera péptica</li>
+  <li>Investigação de dor ou queimação no estômago</li>
+  <li>Suspeita de obstrução intestinal</li>
+  <li>Investigação de sangramento gastrointestinal</li>
+  <li>Problemas nas vias biliares ou cálculos biliares</li>
+  <li>Investigação de problemas urinários</li>
+</ul>
+
+<!-- ========================================== -->
+<!-- FIM DOS NOVOS EXAMES -->
+<!-- ========================================== -->
+        </section>
+
+        <!-- Seção: Biossegurança -->
+        <section id="biosseguranca" class="content-section" aria-labelledby="bio-title">
+            <h2 id="bio-title">Biossegurança nos Exames</h2>
+            <p>Todos os exames de radiologia são seguros quando realizados corretamente. Nossa equipe segue protocolos rígidos para proteger você.</p>
+            
+            <h3>Os exames são seguros?</h3>
+            <p>Sim! A quantidade de radiação usada nos exames é muito pequena e controlada. Os benefícios do diagnóstico são muito maiores que qualquer risco mínimo.</p>
+            
+            <h3>Como a equipe me protege?</h3>
+            <ul>
+                <li>Usamos apenas a quantidade mínima necessária de radiação</li>
+                <li>Protegemos partes do corpo que não precisam ser examinadas</li>
+                <li>Verificamos se você não está grávida antes de exames com radiação</li>
+                <li>Nossos equipamentos passam por manutenção regular</li>
+                <li>Nossa equipe é treinada e certificada</li>
+            </ul>
+            
+            <h3>Posso fazer quantos exames quiser?</h3>
+            <p>Os exames só devem ser feitos quando realmente necessários, indicados pelo seu médico. Não há problema em repetir exames quando há indicação médica.</p>
+            
+            <h3>E se eu estiver grávida?</h3>
+            <p>Sempre avise se você está grávida ou suspeita de gravidez. Existem exames alternativos (como ultrassom) que não usam radiação e são seguros na gravidez.</p>
+        </section>
+
+        <!-- Seção: Indicações -->
+        <section id="indicacoes" class="content-section" aria-labelledby="ind-title">
+            <h2 id="ind-title">Quando Fazer Cada Exame?</h2>
+            
+            <h3>Raio-X é indicado para:</h3>
+            <ul>
+                <li><strong>Suspeita de fratura:</strong> Quedas, pancadas ou dores intensas nos ossos</li>
+                <li><strong>Problemas respiratórios:</strong> Tosse persistente, falta de ar, suspeita de pneumonia</li>
+                <li><strong>Dor no peito:</strong> Para ver coração e pulmões</li>
+                <li><strong>Controle pós-cirúrgico:</strong> Verificar se está tudo bem após cirurgias</li>
+            </ul>
+
+            <h3>Tomografia é indicada para:</h3>
+            <ul>
+                <li><strong>Dor de cabeça intensa:</strong> Para investigar causas no cérebro</li>
+                <li><strong>Dores abdominais:</strong> Para ver órgãos como fígado, rins, intestino</li>
+                <li><strong>Suspeita de tumores:</strong> Para localizar e medir alterações</li>
+                <li><strong>Acidentes graves:</strong> Para avaliar trauma interno</li>
+                <li><strong>Acompanhamento de doenças:</strong> Para ver evolução de tratamentos</li>
+            </ul>
+
+            <h3>Ressonância é indicada para:</h3>
+            <ul>
+                <li><strong>Problemas na coluna:</strong> Dores nas costas, hérnia de disco</li>
+                <li><strong>Lesões esportivas:</strong> Problemas em músculos, tendões, ligamentos</li>
+                <li><strong>Problemas neurológicos:</strong> Alterações no cérebro ou nervos</li>
+                <li><strong>Dores nas articulações:</strong> Joelho, ombro, quadril</li>
+                <li><strong>Suspeita de problemas cardíacos:</strong> Para ver o coração em detalhes</li>
+            </ul>
+
+            <div style="background-color: #e8f4fd; padding: 20px; border-radius: 10px; margin-top: 30px;">
+                <h3 style="color: #1565c0;">💡 Lembre-se:</h3>
+                <p><strong>Sempre siga as orientações do seu médico.</strong> Ele conhece seu caso e sabe qual exame é melhor para você. Se tiver dúvidas, não hesite em perguntar!</p>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align: center; margin-top: 50px; padding: 20px; background-color: #f8f9fa; border-radius: 10px;">
+        <p><strong>InfoRadio - Guia Acessível de Radiologia</strong></p>
+        <p>Desenvolvido para facilitar o acesso à informação sobre exames de imagem</p>
+        <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+            Para ampliar o texto: use Ctrl + "+" | Para navegar: use a tecla Tab | Atalhos: Ctrl+M (contraste), Ctrl+L (ler)
+        </p>
+    </footer>
+
+    <script>
+        // Controle de tamanho da fonte
+        let currentFontSize = 18;
+        const minFontSize = 14;
+        const maxFontSize = 28;
+
+        function increaseFontSize() {
+            if (currentFontSize < maxFontSize) {
+                currentFontSize += 2;
+                document.body.style.fontSize = currentFontSize + 'px';
+                announceToScreenReader('Fonte aumentada para ' + currentFontSize + ' pixels');
+            }
+        }
+
+        function decreaseFontSize() {
+            if (currentFontSize > minFontSize) {
+                currentFontSize -= 2;
+                document.body.style.fontSize = currentFontSize + 'px';
+                announceToScreenReader('Fonte diminuída para ' + currentFontSize + ' pixels');
+            }
+        }
+
+        // Alto contraste
+        let highContrastActive = false;
+
+        function toggleHighContrast() {
+            highContrastActive = !highContrastActive;
+            
+            if (highContrastActive) {
+                document.body.classList.add('high-contrast');
+                announceToScreenReader('Alto contraste ativado');
+            } else {
+                document.body.classList.remove('high-contrast');
+                announceToScreenReader('Alto contraste desativado');
+            }
+        }
+
+        // Menu hambúrguer
+        function toggleMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            const toggleBtn = document.getElementById('menu-toggle-btn');
+            const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                navMenu.classList.add('hidden');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+                announceToScreenReader('Menu fechado');
+            } else {
+                navMenu.classList.remove('hidden');
+                toggleBtn.setAttribute('aria-expanded', 'true');
+                announceToScreenReader('Menu aberto');
+            }
+        }
+
+        // Atualizar seção ativa e breadcrumb
+        function updateActive(element, sectionName) {
+            // Remover aria-current de todos os botões
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.removeAttribute('aria-current');
+            });
+            
+            // Adicionar aria-current ao botão clicado
+            element.setAttribute('aria-current', 'page');
+            
+            // Atualizar breadcrumb
+            const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+            if (breadcrumbCurrent) {
+                breadcrumbCurrent.textContent = ' > ' + sectionName;
+            }
+            
+            // Fechar menu em mobile após clique
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+            
+            announceToScreenReader('Navegando para ' + sectionName);
+        }
+
+        // Text-to-Speech
+        function speakContent() {
+            speechSynthesis.cancel();
+            
+            if ('speechSynthesis' in window) {
+                const mainContent = document.getElementById('main-content');
+                const textToSpeak = getReadableText(mainContent);
+                
+                if (textToSpeak.trim()) {
+                    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                    utterance.lang = 'pt-BR';
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1;
+                    
+                    utterance.onstart = function() {
+                        announceToScreenReader('Iniciando leitura da página');
+                    };
+                    
+                    utterance.onend = function() {
+                        announceToScreenReader('Leitura concluída');
+                    };
+                    
+                    speechSynthesis.speak(utterance);
+                } else {
+                    announceToScreenReader('Nenhum conteúdo encontrado para leitura');
+                }
+            } else {
+                announceToScreenReader('Seu navegador não suporta leitura de texto');
+            }
+        }
+
+        // Função para extrair texto legível das seções
+        function getReadableText(element) {
+            let text = '';
+            const readableElements = element.querySelectorAll('h1, h2, h3, p, li');
+            
+            readableElements.forEach(el => {
+                if (el.offsetParent !== null) {
+                    text += el.textContent.trim() + '. ';
+                }
+            });
+            
+            return text;
+        }
+
+        // Função para anunciar mudanças para leitores de tela
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.style.position = 'absolute';
+            announcement.style.left = '-10000px';
+            announcement.style.width = '1px';
+            announcement.style.height = '1px';
+            announcement.style.overflow = 'hidden';
+            
+            document.body.appendChild(announcement);
+            announcement.textContent = message;
+            
+            setTimeout(() => {
+                document.body.removeChild(announcement);
+            }, 1000);
+        }
+
+        // Navegação suave
+        function smoothScroll(target) {
+            document.querySelector(target).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Adicionar navegação suave aos links internos
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.classList.contains('nav-btn')) {
+                        e.preventDefault();
+                        const target = this.getAttribute('href');
+                        smoothScroll(target);
+                    }
+                });
+            });
+        });
+
+        // Atalhos de teclado
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + Plus para aumentar fonte
+            if (e.ctrlKey && (e.key === '+' || e.key === '=')) {
+                e.preventDefault();
+                increaseFontSize();
+            }
+            
+            // Ctrl + Minus para diminuir fonte
+            if (e.ctrlKey && e.key === '-') {
+                e.preventDefault();
+                decreaseFontSize();
+            }
+            
+            // Ctrl + M para alto contraste
+            if (e.ctrlKey && e.key === 'm') {
+                e.preventDefault();
+                toggleHighContrast();
+            }
+            
+            // Ctrl + L para ler página
+            if (e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                speakContent();
+            }
+        });
+
+        // Melhorar acessibilidade dos botões de navegação
+        document.addEventListener('DOMContentLoaded', function() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+        });
+
+        // Fechar menu ao redimensionar para desktop
+        window.addEventListener('resize', function() {
+            const navMenu = document.getElementById('nav-menu');
+            const toggleBtn = document.getElementById('menu-toggle-btn');
+            
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('hidden');
+                toggleBtn.style.display = 'none';
+            } else {
+                navMenu.classList.add('hidden');
+                toggleBtn.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
